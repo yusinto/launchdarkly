@@ -21,19 +21,14 @@ export const initialiseHomeFlags = () => {
     const flags = {};
 
     for(let key in homeFlags) {
-      console.log(`processing ${key} in homeFlags`);
       if(homeFlags.hasOwnProperty(key)) {
         // initialise each key
         flags[key] = ldClient.variation(key, homeFlags[key]);
-
-        console.log(`flags.${key} is ${flags[key]}`);
 
         // and subscribe to changes
         ldClient.on(`change:${key}`, current => {
           const changedFlag = {};
           changedFlag[key] = current;
-
-          console.log(`detected flag change: ${key}: new value ${current}`);
           dispatch(setHomeFlags(changedFlag));
         });
       }
