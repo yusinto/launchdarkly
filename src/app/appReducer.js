@@ -1,4 +1,4 @@
-import Constants from '../constant';
+import Constants from './common/constant';
 
 const defaultState = {
   isLDReady: false,

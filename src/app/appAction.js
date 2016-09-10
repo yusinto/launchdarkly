@@ -1,5 +1,5 @@
 import ldClient from 'ldclient-js';
-import Constants from '../constant';
+import Constants from './common/constant';
 
 export const setLDReady = ldClient => {
   return {

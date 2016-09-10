@@ -1,5 +1,5 @@
-import Constants from '../constant';
-import {getRandomInt, homeFlags} from '../logic/homeLogic';
+import Constants from '../common/constant';
+import {getRandomInt, homeFlags} from './homeLogic';
 
 const setHomeFlags = flags => {
   return {

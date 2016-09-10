@@ -1,5 +1,5 @@
-import Constants from '../constant';
-import {homeFlags} from '../logic/homeLogic';
+import Constants from '../common/constant';
+import {homeFlags} from './homeLogic';
 
 const defaultState = {
   randomNumber: 0,
