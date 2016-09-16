@@ -20,18 +20,16 @@ export const initialiseHomeFlags = () => {
     const ldClient = getState().App.ldClient;
     const flags = {};
 
-    for(let key in homeFlags) {
-      if(homeFlags.hasOwnProperty(key)) {
-        // initialise each key
-        flags[key] = ldClient.variation(key, homeFlags[key]);
+    for (let key in homeFlags) {
+      // initialise each key
+      flags[key] = ldClient.variation(key, homeFlags[key]);
 
-        // and subscribe to changes
-        ldClient.on(`change:${key}`, current => {
-          const changedFlag = {};
-          changedFlag[key] = current;
-          dispatch(setHomeFlags(changedFlag));
-        });
-      }
+      // and subscribe to changes
+      ldClient.on(`change:${key}`, current => {
+        const changedFlag = {};
+        changedFlag[key] = current;
+        dispatch(setHomeFlags(changedFlag));
+      });
     }
 
     dispatch(setHomeFlags(flags));

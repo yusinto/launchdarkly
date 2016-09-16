@@ -25,6 +25,7 @@ export default class Home extends Component {
           Welcome to the homepage! The random number feature below is feature toggled.
         </p>
         {
+          // feature toggle!
           this.props['random-number'] ?
             <div>
               <button onClick={this.onClickGenerateRandom}>Generate random number</button>
