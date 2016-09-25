@@ -12,6 +12,10 @@ export default class Home extends Component {
     this.props.generateRandom();
   }
 
+  componentWillMount() {
+    this.props.setInitialNumber(5);
+  }
+
   componentWillReceiveProps(newProps) {
     if (newProps.isLDReady && !this.props.isLDReady) {
       this.props.initialiseHomeFlags();

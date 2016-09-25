@@ -4,18 +4,16 @@ import WebpackConfig from '../../webpack.config.dev';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
 import WebPackHotMiddleware from 'webpack-hot-middleware';
 
+// server side rendering
+import React from 'react';
+import {renderToString} from 'react-dom/server';
+import {match, createMemoryHistory, RouterContext} from 'react-router';
+import { Provider } from 'react-redux';
+import routes from '../app/route';
+import createStore from '../app/redux/store';
+
 const PORT = 3000;
 const app = Express();
-const htmlString = `<!DOCTYPE html>
-    <html>
-         <head>
-            <title>Webpack and React</title>
-          </head>
-          <body>
-            <div id="reactDiv" />
-            <script src="/dist/bundle.js"></script>
-          </body>
-    </html>`;
 
 // create a webpack instance from our dev config
 const webpackCompiler = Webpack(WebpackConfig);
@@ -35,7 +33,50 @@ app.use(WebPackHotMiddleware(webpackCompiler));
 // anymore because webpack-dev-middleware serves our bundle.js from memory
 
 app.use((req, res) => {
-  res.end(htmlString);
+  const history = createMemoryHistory(req.path);
+  const store = createStore();
+
+  const matchParams = {
+    history,
+    routes,
+    location: req.originalUrl
+  };
+
+  match(matchParams, (error, redirectLocation, renderProps) => {
+    if (error) {
+      res.status(500).send(error.message);
+    } else if (redirectLocation) {
+      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+    } else if (renderProps) {
+      const reactString = renderToString(
+        <Provider store={store}>
+          <RouterContext {...renderProps} />
+        </Provider>
+      );
+
+      const reduxState = store.getState();
+
+      const html = `<!DOCTYPE html>
+                    <html>
+                      <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <title>WhichCar</title>
+                        <script>
+                            window.__INITIAL_STATE__ = ${JSON.stringify(reduxState)};
+                        </script>
+                      </head>
+                      <body>
+                        <div id="reactDiv">${reactString}</div>
+                        <script type="application/javascript" src="/dist/bundle.js"></script>
+                      </body>
+                    </html>`;
+
+      res.end(html);
+    } else {
+      res.status(404).send('Not found');
+    }
+  });
 });
 
 app.listen(PORT, () => {

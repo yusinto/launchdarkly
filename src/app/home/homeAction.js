@@ -1,6 +1,13 @@
 import Constants from '../common/constant';
 import {getRandomInt, homeFlags} from './homeLogic';
 
+export const setInitialNumber = number => {
+  return {
+    type: 'SET_INITIAL_NUMBER',
+    data: number,
+  }
+};
+
 const setHomeFlags = flags => {
   return {
     type: Constants.SET_HOME_FLAGS,

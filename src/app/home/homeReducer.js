@@ -8,6 +8,9 @@ const defaultState = {
 
 export default function App(state = defaultState, action) {
   switch (action.type) {
+    case 'SET_INITIAL_NUMBER':
+      return Object.assign({}, state, {randomNumber: action.data});
+
     case Constants.GENERATE_RANDOM:
       return Object.assign({}, state, {randomNumber: action.data});
 

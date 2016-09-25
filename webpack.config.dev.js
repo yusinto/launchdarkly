@@ -17,7 +17,23 @@ module.exports = {
         loaders:[{
             test: /\.jsx?$/,
             loader: 'babel',
-            include: path.join(__dirname, 'src')
+            include: path.join(__dirname, 'src'),
+            query: {
+                // Ripped from: https://github.com/gaearon/babel-plugin-react-transform
+                plugins: [
+                    ["react-transform", {
+                        "transforms": [{
+                            "transform": "react-transform-hmr",
+                            "imports": ["react"],
+                            "locals": ["module"]
+                        }, {
+                            // you can have many transforms, not just one
+                            "transform": "react-transform-catch-errors",
+                            "imports": ["react", "redbox-react"]
+                        }]
+                    }]
+                ]
+            }
         }]
     },
 
